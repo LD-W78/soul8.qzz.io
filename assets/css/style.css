@@ -1,0 +1,124 @@
+:root {
+  --bg: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+  --glass: rgba(255,255,255,.1);
+  --highlight: #fff;
+  --radius: 12px;
+  --gap: clamp(10px,2vw,20px);
+  --font: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--bg);
+  color: var(--highlight);
+  font-family: var(--font);
+  padding: var(--gap);
+}
+
+/* 玻璃卡片 */
+.container {
+  width: 100%;
+  max-width: 600px;
+  background: var(--glass);
+  padding: clamp(25px,5vw,50px);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 30px rgba(0,0,0,.5);
+  backdrop-filter: blur(10px);
+  text-align: center;
+}
+
+h1 {
+  font-size: clamp(1.8rem,5vw,3rem);
+  margin-bottom: var(--gap);
+  letter-spacing: 2px;
+}
+
+/* 倒计时网格 */
+.countdown {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: var(--gap);
+  font-size: clamp(1.2rem,4vw,2rem);
+}
+
+.time-box {
+  background: rgba(255,255,255,.2);
+  padding: clamp(15px,3vw,25px) clamp(10px,2vw,20px);
+  border-radius: var(--radius);
+  transition: .3s;
+}
+
+.time-box:hover {
+  background: rgba(255,255,255,.3);
+  transform: translateY(-5px);
+}
+
+.label {
+  font-size: clamp(.7rem,2vw,.9rem);
+  color: #ddd;
+  margin-top: 6px;
+  text-transform: uppercase;
+}
+
+/* 进度条 */
+.progress-wrapper {
+  width: 100%;
+  height: 8px;
+  background: rgba(255,255,255,.2);
+  border-radius: 4px;
+  margin-top: clamp(20px,4vw,30px);
+  overflow: hidden;
+}
+
+#progress {
+  height: 100%;
+  background: var(--highlight);
+  border-radius: 4px;
+  width: 0%;
+  transition: width .3s;
+}
+
+/* 结束提示 */
+.end-msg {
+  font-size: clamp(1.5rem,5vw,2.5rem);
+  color: var(--highlight);
+}
+
+/* 按钮样式 */
+.controls {
+  margin-top: var(--gap);
+  display: flex;
+  gap: var(--gap);
+  justify-content: center;
+}
+
+button {
+  background: rgba(255,255,255,.2);
+  border: none;
+  color: var(--highlight);
+  padding: clamp(8px,2vw,12px) clamp(15px,3vw,25px);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: .3s;
+  font-size: clamp(.9rem,2vw,1.1rem);
+}
+
+button:hover {
+  background: rgba(255,255,255,.3);
+  transform: translateY(-3px);
+}
+
+/* 响应式布局 */
+@media (max-width: 600px) {
+  .countdown {
+    grid-template-columns: repeat(2,1fr);
+  }
+}
+
+@media (max-width: 320px) {
+  .countdown {
+    grid-template-columns: 1fr;
+  }
+}
