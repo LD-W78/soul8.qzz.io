@@ -1,23 +1,126 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My App</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>5 天倒计时</title>
+  <style>
+    /* 重置 & 基础 */
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --bg:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+      --glass:rgba(255,255,255,.1);
+      --highlight:#fff;
+      --radius:12px;
+      --gap:clamp(10px,2vw,20px);
+      --font:"Poppins",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
+    }
+    html,body{height:100%}
+    body{
+      display:flex;justify-content:center;align-items:center;
+      background:var(--bg);color:var(--highlight);
+      font-family:var(--font);padding:var(--gap);
+    }
+
+    /* 玻璃卡片 */
+    .container{
+      width:100%;max-width:600px;
+      background:var(--glass);
+      padding:clamp(25px,5vw,50px);
+      border-radius:var(--radius);
+      box-shadow:0 4px 30px rgba(0,0,0,.5);
+      backdrop-filter:blur(10px);
+      text-align:center;
+    }
+    h1{
+      font-size:clamp(1.8rem,5vw,3rem);
+      margin-bottom:var(--gap);
+      letter-spacing:2px;
+    }
+
+    /* 倒计时网格 */
+    .countdown{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:var(--gap);
+      font-size:clamp(1.2rem,4vw,2rem);
+    }
+    .time-box{
+      background:rgba(255,255,255,.2);
+      padding:clamp(15px,3vw,25px) clamp(10px,2vw,20px);
+      border-radius:var(--radius);
+      transition:.3s;
+    }
+    .time-box:hover{
+      background:rgba(255,255,255,.3);
+      transform:translateY(-5px);
+    }
+    .label{
+      font-size:clamp(.7rem,2vw,.9rem);
+      color:#ddd;margin-top:6px;text-transform:uppercase;
+    }
+
+    /* 进度条 */
+    .progress-wrapper{
+      width:100%;height:8px;background:rgba(255,255,255,.2);
+      border-radius:4px;margin-top:clamp(20px,4vw,30px);overflow:hidden;
+    }
+    #progress{
+      height:100%;background:var(--highlight);border-radius:4px;
+      width:0%;transition:width .3s;
+    }
+
+    /* 结束提示 */
+    .end-msg{font-size:clamp(1.5rem,5vw,2.5rem);color:var(--highlight)}
+
+    /* 手机竖屏：4→2→1 列 */
+    @media (max-width:600px){
+      .countdown{grid-template-columns:repeat(2,1fr)}
+    }
+    @media (max-width:320px){
+      .countdown{grid-template-columns:1fr}
+    }
+  </style>
 </head>
 <body>
-    <h1>Welcome to My App</h1>
-    <button id="pauseButton">Pause</button>
-    <button id="resetButton">Reset</button>
-    <script>
-        document.getElementById('pauseButton').onclick = function() {
-            // Add pause functionality here
-            alert('Paused!');
-        };
-        document.getElementById('resetButton').onclick = function() {
-            // Add reset functionality here
-            alert('Reset!');
-        };
-    </script>
+  <div class="container">
+    <h1>5 天倒计时</h1>
+    <div class="countdown">
+      <div class="time-box"><div id="days">00</div><div class="label">天</div></div>
+      <div class="time-box"><div id="hours">00</div><div class="label">时</div></div>
+      <div class="time-box"><div id="minutes">00</div><div class="label">分</div></div>
+      <div class="time-box"><div id="seconds">00</div><div class="label">秒</div></div>
+    </div>
+    <div class="progress-wrapper"><div id="progress"></div></div>
+  </div>
+
+  <script>
+    const TARGET = new Date(Date.now() + 5 * 24 * 60 * 60 * 1000);
+    const START  = new Date();
+    const TOTAL  = TARGET - START;
+
+    const countdown = () => {
+      const now = new Date();
+      const diff = TARGET - now;
+      if (diff <= 0) {
+        document.querySelector('.countdown').innerHTML = '<div class="end-msg">倒计时结束 🎉</div>';
+        document.getElementById('progress').style.width = '100%';
+        return;
+      }
+      const days    = Math.floor(diff / (1000*60*60*24));
+      const hours   = Math.floor((diff / (1000*60*60)) % 24);
+      const minutes = Math.floor((diff / (1000*60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+      document.getElementById('days').textContent    = String(days).padStart(2,'0');
+      document.getElementById('hours').textContent   = String(hours).padStart(2,'0');
+      document.getElementById('minutes').textContent = String(minutes).padStart(2,'0');
+      document.getElementById('seconds').textContent = String(seconds).padStart(2,'0');
+      const percent = Math.max(0, Math.min(100, ((TOTAL - diff) / TOTAL) * 100));
+      document.getElementById('progress').style.width = percent + '%';
+    };
+
+    countdown();
+    setInterval(countdown, 1000);
+  </script>
 </body>
 </html>
